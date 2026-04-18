@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Projects | Nova Freelance Agency</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Simple fade animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
+    }
+  </style>
+</head>
+
+<body class="bg-[#101010] text-white flex items-center justify-center h-screen">
+
+  <div class="text-center fade-in">
+
+    <!-- Title -->
+    <h1 class="text-4xl md:text-5xl font-bold text-[#2ec4b6] mb-4">
+      🚧 Coming Soon
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="text-gray-400 mb-8">
+      Our amazing projects are on the way. Stay tuned!
+    </p>
+
+    <!-- Animated Loader -->
+    <div class="flex justify-center mb-8">
+      <div class="w-12 h-12 border-4 border-[#2ec4b6] border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <!-- Button -->
+    <button onclick="goHome()" class="
+      px-6 py-3 rounded-full 
+      bg-[#2ec4b6] text-white 
+      hover:shadow-[0_0_15px_#2ec4b6]
+      transition duration-300
+    ">
+      ⬅ Return to Home
+    </button>
+
+  </div>
+
+  <script>
+    function goHome() {
+      // small animation effect before redirect
+      document.body.style.opacity = "0";
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 400);
+    }
+  </script>
+
+</body>
+</html>

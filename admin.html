@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 { text-align: center; }
+
+    button {
+      padding: 10px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1a1a1a;
+    }
+
+    th, td {
+      border: 1px solid #333;
+      padding: 10px;
+    }
+
+    th {
+      background: #222;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📊 Admin Dashboard</h1>
+
+<button onclick="loadBookings()">🔄 Refresh</button>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Service</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Details</th>
+      <th>Addons</th>
+      <th>Total</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<script>
+
+async function loadBookings() {
+  try {
+    const res = await fetch("http://localhost:5000/bookings");
+    const data = await res.json();
+
+    console.log("DATA:", data);
+
+    if (!Array.isArray(data)) {
+      alert(data.error || "Server error");
+      return;
+    }
+
+    const table = document.getElementById("tableBody");
+    table.innerHTML = "";
+
+    data.forEach(b => {
+      table.innerHTML += `
+        <tr>
+          <td>${b.id}</td>
+          <td>${b.service}</td>
+          <td>${b.name}</td>
+          <td>${b.email}</td>
+          <td>${b.phone}</td>
+          <td>${b.details}</td>
+          <td>${b.addons}</td>
+          <td>₹${b.total}</td>
+          <td>
+            <button onclick="deleteBooking(${b.id})">❌ Delete</button>
+          </td>
+        </tr>
+      `;
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert("Error loading bookings");
+  }
+}
+
+async function deleteBooking(id) {
+  if (!confirm("Are you sure?")) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/booking/${id}`, {
+      method: "DELETE"
+    });
+
+    const data = await res.json();
+    alert(data.message);
+
+    loadBookings();
+
+  } catch (err) {
+    console.error(err);
+    alert("Delete failed");
+  }
+}
+
+loadBookings();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Creationz</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+html{scroll-behavior:smooth;}
+body{background:#0a0a14;color:#fff;overflow-x:hidden;}
+
+/* SCROLL PROGRESS */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#2ec4b6,#6C63FF,#00E5FF);z-index:9999;transition:width 0.1s linear;width:0;}
+
+/* CURSOR GLOW */
+.cursor-glow{position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(46,196,182,0.06),transparent 70%);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:opacity 0.3s;}
+
+/* PRELOADER */
+.preloader{position:fixed;inset:0;background:#0a0a14;z-index:10000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity 0.6s,visibility 0.6s;}
+.preloader.hidden{opacity:0;visibility:hidden;}
+.preloader-ring{width:60px;height:60px;border:3px solid transparent;border-top:3px solid #2ec4b6;border-right:3px solid #6C63FF;border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.preloader p{font-size:14px;color:#aaa;letter-spacing:3px;text-transform:uppercase;}
+
+/* NAV */
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 50px;position:fixed;top:0;width:100%;z-index:1000;transition:all 0.4s;}
+nav.scrolled{background:rgba(10,10,20,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.05);padding:14px 50px;}
+nav .logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+nav h1{background:linear-gradient(135deg,#2ec4b6,#6C63FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:22px;font-weight:700;letter-spacing:-0.5px;}
+nav .logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#2ec4b6,#6C63FF);display:flex;align-items:center;justify-content:center;font-size:14px;color:#000;font-weight:700;}
+nav ul{display:flex;gap:32px;list-style:none;align-items:center;}
+nav ul li a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:14px;font-weight:400;position:relative;padding:4px 0;transition:color 0.3s;}
+nav ul li a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:linear-gradient(90deg,#2ec4b6,#6C63FF);transition:width 0.3s;border-radius:2px;}
+nav ul li a:hover{color:#fff;}
+nav ul li a:hover::after{width:100%;}
+nav .nav-btn{background:linear-gradient(135deg,#2ec4b6,#6C63FF);color:#fff;border:none;padding:10px 22px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:all 0.3s;letter-spacing:0.3px;}
+nav .nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(46,196,182,0.3);}
+
+/* Mobile menu */
+.menu-btn{display:none;font-size:22px;cursor:pointer;color:#fff;background:none;border:none;}
+.mobile-menu{display:none;flex-direction:column;background:rgba(10,10,20,0.98);backdrop-filter:blur(20px);padding:20px 30px;position:absolute;top:65px;width:100%;left:0;border-bottom:1px solid rgba(255,255,255,0.05);gap:5px;}
+.mobile-menu.show{display:flex;}
+.mobile-menu li{list-style:none;}
+.mobile-menu li a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:15px;padding:12px 0;display:block;border-bottom:1px solid rgba(255,255,255,0.04);transition:all 0.3s;}
+.mobile-menu li a:hover{color:#2ec4b6;padding-left:8px;}
+
+/* HERO */
+.hero{position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.bg-video{position:absolute;top:50%;left:50%;width:100%;height:100%;object-fit:cover;transform:translate(-50%,-50%);z-index:0;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,20,0.1) 0%,rgba(10,10,20,0.3) 50%,rgba(10,10,20,0.20) 100%);z-index:1;}
+.hero-particles{position:absolute;inset:0;z-index:2;overflow:hidden;}
+.particle{position:absolute;width:3px;height:3px;background:#2ec4b6;border-radius:50%;opacity:0;animation:particleFloat linear infinite;}
+@keyframes particleFloat{0%{opacity:0;transform:translateY(100vh) scale(0);}10%{opacity:0.8;}90%{opacity:0.8;}100%{opacity:0;transform:translateY(-10vh) scale(1);}}
+.hero-content{position:relative;text-align:center;z-index:3;padding:0 20px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(46,196,182,0.1);border:1px solid rgba(46,196,182,0.2);padding:8px 20px;border-radius:50px;font-size:12px;color:#2ec4b6;margin-bottom:30px;letter-spacing:1px;text-transform:uppercase;backdrop-filter:blur(10px);}
+.hero-badge .dot{width:6px;height:6px;background:#2ec4b6;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.5);}}
+.hero h2{font-size:clamp(36px,6vw,72px);font-weight:800;line-height:1.05;margin-bottom:20px;letter-spacing:-2px;}
+.hero h2 .gradient-text{background:linear-gradient(135deg,#2ec4b6,#6C63FF,#00E5FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:gradientShift 4s ease infinite;}
+@keyframes gradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.hero p{font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,0.6);max-width:550px;margin:0 auto 40px;line-height:1.7;font-weight:300;}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{padding:16px 36px;border:none;border-radius:12px;background:linear-gradient(135deg,#2ec4b6,#6C63FF);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#6C63FF,#00E5FF);opacity:0;transition:opacity 0.3s;}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(46,196,182,0.3);}
+.btn-primary:hover::before{opacity:1;}
+.btn-primary span,.btn-primary i{position:relative;z-index:1;}
+.btn-secondary{padding:16px 36px;border:1px solid rgba(255,255,255,0.15);border-radius:12px;background:rgba(255,255,255,0.03);color:#fff;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.3s;backdrop-filter:blur(10px);text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.06);transform:translateY(-3px);}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:2px;text-transform:uppercase;animation:scrollBounce 2s infinite;}
+@keyframes scrollBounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
+.hero-scroll .line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,0.4),transparent);}
+
+/* STATS BAR */
+.stats-bar{background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);padding:40px 20px;backdrop-filter:blur(10px);}
+.stats-container{max-width:1100px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center;}
+.stat-item h3{font-size:clamp(28px,4vw,42px);font-weight:800;background:linear-gradient(135deg,#2ec4b6,#6C63FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-item p{font-size:13px;color:rgba(255,255,255,0.5);margin-top:5px;text-transform:uppercase;letter-spacing:1px;}
+
+/* SECTION SHARED */
+.section{padding:100px 20px;position:relative;}
+.section-dark{background:#0a0a14;}
+.section-alt{background:#0d0d1a;}
+.container{max-width:1100px;margin:auto;}
+.section-header{text-align:center;margin-bottom:60px;}
+.section-tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#2ec4b6;text-transform:uppercase;letter-spacing:2px;margin-bottom:15px;background:rgba(46,196,182,0.08);padding:6px 16px;border-radius:50px;border:1px solid rgba(46,196,182,0.15);}
+.section-header h2{font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-1px;line-height:1.15;}
+.section-header p{color:rgba(255,255,255,0.5);margin-top:15px;max-width:500px;margin-left:auto;margin-right:auto;font-size:15px;line-height:1.7;}
+
+/* REVEAL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(40px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);}
+.reveal.active{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);}
+.reveal-left.active{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);}
+.reveal-right.active{opacity:1;transform:translateX(0);}
+.reveal-scale{opacity:0;transform:scale(0.9);transition:all 0.8s cubic-bezier(0.16,1,0.3,1);}
+.reveal-scale.active{opacity:1;transform:scale(1);}
+
+/* WHAT WE DO */
+.what-container{display:flex;align-items:center;justify-content:space-between;gap:60px;flex-wrap:wrap;}
+.what-text{flex:1;min-width:300px;}
+.what-text h2{font-size:clamp(28px,3.5vw,38px);font-weight:700;margin-bottom:15px;letter-spacing:-0.5px;}
+.what-text>p{color:rgba(255,255,255,0.5);margin-bottom:30px;max-width:420px;line-height:1.7;font-size:15px;}
+.what-list{display:flex;flex-direction:column;gap:12px;}
+.what-list div{padding:14px 20px;border-left:3px solid rgba(46,196,182,0.3);background:rgba(255,255,255,0.02);border-radius:0 10px 10px 0;transition:all 0.4s;cursor:default;font-size:15px;display:flex;align-items:center;gap:12px;}
+.what-list div i{color:#2ec4b6;font-size:16px;width:20px;text-align:center;}
+.what-list div:hover{transform:translateX(10px);border-left-color:#2ec4b6;background:rgba(46,196,182,0.05);box-shadow:0 4px 20px rgba(46,196,182,0.1);}
+.what-visual{flex:1;display:flex;justify-content:center;align-items:center;min-width:280px;}
+.logo-ring{position:relative;width:300px;height:300px;display:flex;align-items:center;justify-content:center;}
+.logo-ring::before{content:'';position:absolute;inset:-10px;border-radius:50%;border:2px solid transparent;border-top:2px solid #2ec4b6;border-bottom:2px solid #6C63FF;animation:ringRotate 6s linear infinite;}
+.logo-ring::after{content:'';position:absolute;inset:-30px;border-radius:50%;border:1px solid transparent;border-left:1px solid rgba(46,196,182,0.2);border-right:1px solid rgba(108,99,255,0.2);animation:ringRotate 10s linear infinite reverse;}
+@keyframes ringRotate{to{transform:rotate(360deg);}}
+.logo-ring img{width:220px;height:220px;object-fit:contain;border-radius:50%;position:relative;z-index:1;}
+.logo-glow{position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(46,196,182,0.15),transparent 70%);animation:glowPulse 3s ease-in-out infinite alternate;z-index:0;}
+@keyframes glowPulse{from{transform:scale(1);opacity:0.5;}to{transform:scale(1.3);opacity:1;}}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.service-card{background:rgba(255,255,255,0.03);padding:30px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);transition:all 0.4s;position:relative;overflow:hidden;}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#2ec4b6,transparent);opacity:0;transition:opacity 0.4s;}
+.service-card:hover{transform:translateY(-8px);border-color:rgba(46,196,182,0.2);background:rgba(255,255,255,0.05);box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.service-card:hover::before{opacity:1;}
+.service-card .icon{width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,rgba(46,196,182,0.15),rgba(108,99,255,0.15));display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:20px;color:#2ec4b6;}
+.service-card h3{font-size:18px;font-weight:600;margin-bottom:10px;}
+.service-card .desc{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:15px;line-height:1.6;}
+.service-card ul{list-style:none;}
+.service-card ul li{margin-bottom:8px;font-size:13px;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:8px;}
+.service-card ul li i{color:#2ec4b6;font-size:10px;}
+.service-card.featured{border-color:rgba(46,196,182,0.3);background:rgba(46,196,182,0.03);}
+.service-card.featured .icon{background:linear-gradient(135deg,#2ec4b6,#6C63FF);color:#000;}
+.service-card .card-btn{display:inline-flex;align-items:center;gap:6px;margin-top:18px;padding:10px 20px;background:rgba(46,196,182,0.1);color:#2ec4b6;border:1px solid rgba(46,196,182,0.2);border-radius:8px;font-size:13px;text-decoration:none;transition:all 0.3s;cursor:pointer;}
+.service-card .card-btn:hover{background:rgba(46,196,182,0.2);transform:translateX(4px);}
+
+/* PRICING */
+.pricing{padding:100px 20px;background:#0a0a14;}
+.pricing-header{text-align:center;margin-bottom:50px;}
+.pricing-header h2{font-size:clamp(28px,4vw,38px);font-weight:700;letter-spacing:-0.5px;}
+.pricing-header p{color:rgba(255,255,255,0.5);margin-top:10px;font-size:15px;}
+.free-trial{background:rgba(46,196,182,0.03);padding:40px 30px;border-radius:20px;text-align:center;margin:0 auto 60px;max-width:440px;border:1px solid rgba(46,196,182,0.15);backdrop-filter:blur(15px);transition:all 0.4s;position:relative;overflow:hidden;}
+.free-trial::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(46,196,182,0.05),transparent,rgba(108,99,255,0.05),transparent);animation:rotateBorder 8s linear infinite;}
+@keyframes rotateBorder{to{transform:rotate(360deg);}}
+.free-trial:hover{transform:translateY(-5px);box-shadow:0 20px 60px rgba(46,196,182,0.15);border-color:rgba(46,196,182,0.3);}
+.free-trial>*{position:relative;z-index:1;}
+.free-trial h3{font-size:14px;color:#2ec4b6;margin-bottom:8px;text-transform:uppercase;letter-spacing:2px;}
+.free-trial .price{font-size:48px;font-weight:800;background:linear-gradient(135deg,#2ec4b6,#6C63FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;}
+.free-trial ul{list-style:none;margin:20px 0;}
+.free-trial ul li{margin:10px 0;color:rgba(255,255,255,0.7);font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.free-trial ul li i{color:#2ec4b6;font-size:12px;}
+.conditions{font-size:11px;color:rgba(255,255,255,0.35);margin-top:15px;line-height:1.7;}
+.free-trial .trial-btn{margin-top:20px;padding:14px;width:100%;border-radius:12px;border:none;background:linear-gradient(135deg,#2ec4b6,#6C63FF);color:#fff;font-weight:600;font-size:14px;cursor:pointer;transition:all 0.3s;position:relative;z-index:1;letter-spacing:0.5px;}
+.free-trial .trial-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(46,196,182,0.3);}
+.section-title{margin:60px 0 25px;text-align:center;color:rgba(255,255,255,0.4);font-size:14px;text-transform:uppercase;letter-spacing:3px;}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:1100px;margin:0 auto;}
+
+/* FLIP CARDS */
+.price-card{perspective:1200px;height:370px;}
+.price-inner{height:100%;transition:0.7s cubic-bezier(0.4,0,0.2,1);transform-style:preserve-3d;position:relative;}
+.price-card.flip .price-inner{transform:rotateY(180deg);}
+.price-front,.price-back{position:absolute;width:100%;height:100%;padding:28px;border-radius:18px;background:rgba(255,255,255,0.03);backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,0.08);backface-visibility:hidden;display:flex;flex-direction:column;}
+.price-back{transform:rotateY(180deg);justify-content:center;}
+.price-front h4{font-size:18px;font-weight:600;margin-bottom:6px;}
+.price-front>p{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:18px;}
+.price-front ul,.price-back ul{list-style:none;flex:1;}
+.price-front ul li,.price-back ul li{margin-bottom:10px;font-size:13px;color:rgba(255,255,255,0.65);display:flex;align-items:center;gap:8px;}
+.price-front ul li i,.price-back ul li i{color:#2ec4b6;font-size:10px;}
+.price-back h2{font-size:32px;font-weight:800;margin-bottom:20px;background:linear-gradient(135deg,#2ec4b6,#6C63FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.price-front .flip-btn,.price-back .flip-btn{width:100%;padding:12px;margin-top:auto;border:none;border-radius:10px;background:linear-gradient(135deg,#2ec4b6,#6C63FF);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:6px;}
+.price-front .flip-btn:hover,.price-back .flip-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(46,196,182,0.3);}
+.price-front .flip-btn:active,.price-back .flip-btn:active{transform:scale(0.97);}
+.badge{position:absolute;top:15px;right:15px;font-size:11px;padding:5px 14px;border-radius:50px;background:linear-gradient(135deg,#ff00cc,#3333ff);color:#fff;font-weight:500;animation:badgeGlow 2s infinite alternate;letter-spacing:0.5px;}
+@keyframes badgeGlow{from{box-shadow:0 0 8px rgba(255,0,204,0.3);}to{box-shadow:0 0 20px rgba(51,51,255,0.5);}}
+.addons{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:1100px;margin:30px auto 0;}
+.addons span{background:rgba(255,255,255,0.04);padding:12px 20px;border-radius:10px;font-size:13px;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.06);transition:all 0.3s;cursor:default;}
+.addons span:hover{border-color:rgba(46,196,182,0.3);background:rgba(46,196,182,0.05);color:#2ec4b6;transform:translateY(-2px);}
+.why{text-align:center;margin-top:70px;}
+.why h3{margin-bottom:25px;font-size:clamp(22px,3vw,28px);font-weight:600;}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:700px;margin:auto;}
+.why-item{background:rgba(255,255,255,0.03);padding:25px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.06);transition:all 0.4s;cursor:default;}
+.why-item:hover{transform:translateY(-5px);border-color:rgba(46,196,182,0.2);box-shadow:0 15px 40px rgba(0,0,0,0.2);}
+.why-item i{font-size:24px;margin-bottom:12px;color:#2ec4b6;}
+.why-item p{font-size:14px;color:rgba(255,255,255,0.7);}
+
+/* WORKS */
+.works-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;max-width:1100px;margin:auto;}
+.work-card{background:rgba(255,255,255,0.03);padding:0;border-radius:18px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;cursor:pointer;transition:all 0.4s;position:relative;}
+.work-card:hover{transform:translateY(-10px);border-color:rgba(46,196,182,0.2);box-shadow:0 25px 60px rgba(0,0,0,0.3);}
+.work-card .work-img{width:100%;height:200px;background:linear-gradient(135deg,rgba(46,196,182,0.1),rgba(108,99,255,0.1));display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;overflow:hidden;}
+.work-card .work-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,20,0.8),transparent);opacity:0;transition:opacity 0.4s;}
+.work-card:hover .work-img::after{opacity:1;}
+.work-card .work-img .arrow{position:absolute;z-index:1;opacity:0;transform:translateY(10px);transition:all 0.4s;color:#fff;font-size:18px;}
+.work-card:hover .work-img .arrow{opacity:1;transform:translateY(0);}
+.work-card .work-info{padding:24px;}
+.work-card h3{font-size:17px;font-weight:600;margin-bottom:8px;color:#fff;}
+.work-card p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;}
+.work-card .work-tags{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap;}
+.work-card .work-tags span{font-size:11px;padding:4px 10px;border-radius:50px;background:rgba(46,196,182,0.08);color:#2ec4b6;border:1px solid rgba(46,196,182,0.15);}
+
+/* EXPLORE BTN */
+.explore-btn{margin-top:50px;padding:16px 40px;font-size:15px;border:none;border-radius:14px;background:linear-gradient(135deg,#2ec4b6,#6C63FF);color:#fff;cursor:pointer;transition:all 0.3s;font-weight:600;letter-spacing:0.5px;display:inline-flex;align-items:center;gap:8px;}
+.explore-btn:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(46,196,182,0.3);}
+.explore-btn.clicked{animation:explode 0.6s forwards;}
+@keyframes explode{0%{transform:scale(1);box-shadow:0 0 0px #2ec4b6;}50%{transform:scale(1.15);box-shadow:0 0 40px #2ec4b6;}100%{transform:scale(0);opacity:0;}}
+
+/* FOOTER */
+.footer{background:#060610;padding:80px 20px 20px;border-top:1px solid rgba(255,255,255,0.05);}
+.footer-container{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;max-width:1200px;margin:auto;}
+.footer-section h2,.footer-section h3{color:#fff;margin-bottom:18px;font-size:16px;font-weight:600;}
+.footer-section p{font-size:13px;line-height:1.8;color:rgba(255,255,255,0.45);}
+.footer-section ul{list-style:none;padding:0;}
+.footer-section ul li{margin-bottom:10px;}
+.footer-section ul li a{color:rgba(255,255,255,0.45);text-decoration:none;font-size:13px;transition:all 0.3s;}
+.footer-section ul li a:hover{color:#2ec4b6;padding-left:5px;}
+.footer-section .socials{display:flex;gap:12px;margin-top:15px;}
+.footer-section .socials a{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);text-decoration:none;font-size:15px;transition:all 0.3s;}
+.footer-section .socials a:hover{background:rgba(46,196,182,0.1);border-color:rgba(46,196,182,0.3);color:#2ec4b6;transform:translateY(-3px);}
+.footer-bottom{text-align:center;border-top:1px solid rgba(255,255,255,0.05);margin-top:50px;padding-top:20px;font-size:12px;color:rgba(255,255,255,0.3);}
+
+/* RESPONSIVE */
+@media(max-width:1069px){
+  nav ul{display:none;}
+  nav .nav-btn{display:none;}
+  .menu-btn{display:block;}
+  .bg-video{object-fit:cover;}
+  .hero-scroll{display:none;}
+}
+@media(max-width:900px){
+  .services-grid{grid-template-columns:1fr 1fr;}
+  .stats-container{grid-template-columns:repeat(2,1fr);gap:30px;}
+  .footer-container{grid-template-columns:1fr 1fr;}
+  .why-grid{grid-template-columns:1fr;max-width:300px;}
+}
+@media(max-width:600px){
+  nav{padding:14px 20px;}
+  .section{padding:70px 16px;}
+  .services-grid{grid-template-columns:1fr;}
+  .what-container{flex-direction:column;text-align:center;}
+  .what-text>p{margin:auto;}
+  .what-list div{border-left:none;border-bottom:2px solid rgba(46,196,182,0.2);border-radius:10px;}
+  .what-list div:hover{transform:translateX(0);border-bottom-color:#2ec4b6;}
+  .logo-ring{width:220px;height:220px;}
+  .logo-ring img{width:160px;height:160px;}
+  .pricing-grid{grid-template-columns:1fr;}
+  .price-card{height:380px;}
+  .works-grid{grid-template-columns:1fr;}
+  .footer-container{grid-template-columns:1fr;}
+  .stats-container{grid-template-columns:1fr 1fr;}
+  .hero-btns{flex-direction:column;align-items:center;}
+}
+
+.addons-box{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:15px 0;
+}
+
+.addons-box label{
+  background:rgba(255,255,255,0.04);
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:13px;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.summary{
+  margin:20px 0;
+  padding:15px;
+  background:rgba(46,196,182,0.08);
+  border-radius:10px;
+  font-size:18px;
+  text-align:center;
+}
+
+/* BOOKING FORM */
+.booking-container{
+  max-width:900px;
+  margin:0 auto 60px;
+  background:rgba(255,255,255,0.03);
+  padding:40px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(15px);
+  text-align:center;
+}
+
+.booking-container h2{
+  font-size:28px;
+  margin-bottom:10px;
+}
+
+.booking-container p{
+  color:rgba(255,255,255,0.5);
+  margin-bottom:30px;
+}
+
+.booking-container label {
+  display: block;
+  text-align: left;
+  margin-bottom: 8px;
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+}
+
+.form-row{
+  display:flex;
+  gap:15px;
+  margin-bottom:15px;
+  flex-wrap:wrap;
+}
+
+.booking-container input,
+.booking-container select,
+.booking-container textarea{
+  flex:1;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.02);
+  color:#fff;
+  outline:none;
+  font-size:14px;
+  width: 100%;
+}
+
+.booking-container textarea{
+  width:100%;
+  resize:none;
+  margin-bottom:15px;
+}
+
+.booking-container button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#2ec4b6,#6C63FF);
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.booking-container button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(46,196,182,0.3);
+}
+
+.booking-container select {
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+}
+
+/* FIX DROPDOWN OPTIONS */
+.booking-container select option {
+  background: #0a0a14;
+  color: #fff;
+}
+
+.contact-help{
+  margin-top:25px;
+  text-align:center;
+}
+
+.contact-help p{
+  font-size:13px;
+  color:rgba(255,255,255,0.6);
+  margin-bottom:10px;
+}
+
+.contact-buttons{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.call-btn,
+.whatsapp-btn{
+  padding:10px 18px;
+  border-radius:8px;
+  text-decoration:none;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:0.3s;
+}
+
+/* Call Button */
+.call-btn{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  color:#fff;
+}
+
+.call-btn:hover{
+  background:rgba(255,255,255,0.1);
+  transform:translateY(-2px);
+}
+
+/* WhatsApp Button */
+.whatsapp-btn{
+  background:#25D366;
+  color:#000;
+  font-weight:600;
+}
+
+.whatsapp-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(37,211,102,0.4);
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div class="preloader" id="preloader">
+  <div class="preloader-ring"></div>
+  <p>Loading</p>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- CURSOR GLOW -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="logo">
+    <div class="logo-icon">N</div>
+    <h1>Nova Creationz</h1>
+  </a>
+
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <button class="nav-btn" onclick="window.location.href='#contact'">Book Now</button>
+  <button class="menu-btn" id="menuBtn">☰</button>
+
+  <ul class="mobile-menu" id="mobileMenu">
+    <li><a href="#home" onclick="closeMenu()">Home</a></li>
+    <li><a href="#services" onclick="closeMenu()">Services</a></li>
+    <li><a href="#works" onclick="closeMenu()">Works</a></li>
+    <li><a href="#pricing" onclick="closeMenu()">Pricing</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <video autoplay muted loop class="bg-video" id="heroVideo">
+    <source src="NOVA CREATIONZ.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+
+  <!-- Particles -->
+  <div class="hero-particles" id="heroParticles"></div>
+
+  <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+    <a href="Nova Creationz.pdf" download style="padding:14px 30px; border-radius:10px; background:linear-gradient(135deg,#00E5FF,#2ec4b6); color:#000; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:8px; z-index:5; position:relative; margin-top: 610px;">
+      <i class="fas fa-download"></i> Download CV
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-container">
+    <div class="stat-item reveal">
+      <h3><span class="counter" data-target="50">0</span>+</h3>
+      <p>Projects Delivered</p>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.1s;">
+      <h3><span class="counter" data-target="40">0</span>+</h3>
+      <p>Happy Clients</p>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.2s;">
+      <h3><span class="counter" data-target="99">0</span>%</h3>
+      <p>Client Satisfaction</p>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:0.3s;">
+      <h3><span class="counter" data-target="2">0</span>+</h3>
+      <p>Years Experience</p>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT WE DO -->
+<section id="services" class="section section-alt">
+  <div class="container">
+    <div class="what-container">
+      <div class="what-text reveal-left">
+        <div class="section-tag"><i class="fas fa-bolt"></i> What We Do</div>
+        <h2>Modern Digital Solutions Crafted for <span style="color:#2ec4b6;">You</span></h2>
+        <p>We create modern, high-performing digital experiences that help you stand out in today's competitive landscape.</p>
+        <div class="what-list">
+          <div><i class="fas fa-globe"></i> Website Development</div>
+          <div><i class="fas fa-palette"></i> UI/UX Design</div>
+          <div><i class="fas fa-mobile-alt"></i> Responsive Design</div>
+          <div><i class="fas fa-rocket"></i> Fast & Optimized Solutions</div>
+        </div>
+      </div>
+      <div class="what-visual reveal-right">
+        <div class="logo-ring">
+          <div class="logo-glow"></div>
+          <img src="nova (1).png" alt="Nova Logo">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES GRID -->
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-layer-group"></i> Services</div>
+      <h2>Everything You Need</h2>
+      <p>From concept to launch, we handle every step with precision and creativity.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal" style="transition-delay:0s;">
+        <div class="icon"><i class="fas fa-code"></i></div>
+        <h3>Web Development</h3>
+        <p class="desc">Clean, semantic code that performs flawlessly across all devices.</p>
+        <ul>
+          <li><i class="fas fa-check"></i> HTML / CSS / JS</li>
+          <li><i class="fas fa-check"></i> React / Next.js</li>
+          <li><i class="fas fa-check"></i> Node.js / Python</li>
+          <li><i class="fas fa-check"></i> Database Integration</li>
+        </ul>
+      </div>
+      <div class="service-card featured reveal" style="transition-delay:0.1s;">
+        <div class="icon"><i class="fas fa-pen-nib"></i></div>
+        <h3>UI/UX Design</h3>
+        <p class="desc">User-centered designs that look stunning and convert visitors.</p>
+        <ul>
+          <li><i class="fas fa-check"></i> Figma / Adobe XD</li>
+          <li><i class="fas fa-check"></i> Wireframing</li>
+          <li><i class="fas fa-check"></i> Prototyping</li>
+          <li><i class="fas fa-check"></i> Design Systems</li>
+        </ul>
+        <a href="#pricing" class="card-btn">View Plans <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.2s;">
+        <div class="icon"><i class="fas fa-chart-line"></i></div>
+        <h3>Digital Presence</h3>
+        <p class="desc">Social media graphics and branding that make you memorable.</p>
+        <ul>
+          <li><i class="fas fa-check"></i> Social Media Posters</li>
+          <li><i class="fas fa-check"></i> Logo Design</li>
+          <li><i class="fas fa-check"></i> Brand Identity</li>
+          <li><i class="fas fa-check"></i> SEO Basics</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing">
+  <div class="container">
+    <div class="pricing-header reveal">
+      <div class="section-tag"><i class="fas fa-tag"></i> Pricing</div>
+      <h2>Affordable Plans for Everyone</h2>
+      <p>Students, startups & businesses — we have the right plan for you.</p>
+    </div>
+
+    <!-- FREE TRIAL -->
+    <div class="free-trial reveal-scale">
+      <h3><i class="fas fa-gift"></i> Free Trial</h3>
+      <div class="price">₹0</div>
+      <ul>
+        <li><i class="fas fa-check"></i> 1-page static website</li>
+        <li><i class="fas fa-check"></i> 1 social media poster</li>
+        <li><i class="fas fa-check"></i> Delivery in 2–3 days</li>
+      </ul>
+      <p class="conditions">* "Powered by Nova Creationz" badge required · 1 revision · No custom features</p>
+     <button class="trial-btn get-started-btn">Start Free Trial</button>
+    </div>
+
+    <!-- INDIVIDUAL SERVICES -->
+    <h3 class="section-title reveal">Individual Services</h3>
+    <div class="pricing-grid">
+      <div class="price-card reveal" style="transition-delay:0s;">
+        <div class="price-inner">
+          <div class="price-front">
+            <h4><i class="fas fa-user" style="color:#2ec4b6;margin-right:6px;"></i> Portfolio Website</h4>
+            <p>Personal branding website</p>
+            <ul>
+              <li><i class="fas fa-check"></i> Fully responsive</li>
+              <li><i class="fas fa-check"></i> Modern UI design</li>
+              <li><i class="fas fa-check"></i> Smooth animations</li>
+              <li><i class="fas fa-check"></i> Fast loading</li>
+            </ul>
+            <button class="flip-btn" onclick="flipCard(event,this)">View Pricing <i class="fas fa-arrow-down"></i></button>
+          </div>
+          <div class="price-back">
+            <h2>₹999 – ₹1,499</h2>
+            <ul>
+              <li><i class="fas fa-check"></i> 1–2 pages</li>
+              <li><i class="fas fa-check"></i> 1 revision included</li>
+              <li><i class="fas fa-check"></i> Fast 3-day delivery</li>
+              <li><i class="fas fa-check"></i> Mobile optimized</li>
+            </ul>
+            <button class="flip-btn get-started-btn">Get Started <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="price-card reveal" style="transition-delay:0.1s;">
+        <div class="price-inner">
+          <div class="price-front">
+            <h4><i class="fas fa-building" style="color:#2ec4b6;margin-right:6px;"></i> Static Website</h4>
+            <p>Business landing page</p>
+            <ul>
+              <li><i class="fas fa-check"></i> Clean UI/UX</li>
+              <li><i class="fas fa-check"></i> Contact section</li>
+              <li><i class="fas fa-check"></i> Responsive design</li>
+              <li><i class="fas fa-check"></i> SEO friendly</li>
+            </ul>
+            <button class="flip-btn" onclick="flipCard(event,this)">View Pricing <i class="fas fa-arrow-down"></i></button>
+          </div>
+          <div class="price-back">
+            <h2>₹1,999 – ₹2,999</h2>
+            <ul>
+              <li><i class="fas fa-check"></i> 3+ sections</li>
+              <li><i class="fas fa-check"></i> 2 revisions included</li>
+              <li><i class="fas fa-check"></i> Mobile optimized</li>
+              <li><i class="fas fa-check"></i> 5-day delivery</li>
+            </ul>
+           <button class="flip-btn get-started-btn">Get Started <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="price-card reveal" style="transition-delay:0.2s;">
+        <div class="price-inner">
+          <div class="price-front">
+            <h4><i class="fas fa-cogs" style="color:#2ec4b6;margin-right:6px;"></i> Full Stack Website</h4>
+            <p>Dynamic web applications</p>
+            <ul>
+              <li><i class="fas fa-check"></i> Login system</li>
+              <li><i class="fas fa-check"></i> Database integration</li>
+              <li><i class="fas fa-check"></i> Dynamic features</li>
+              <li><i class="fas fa-check"></i> Admin panel</li>
+            </ul>
+            <button class="flip-btn" onclick="flipCard(event,this)">View Pricing <i class="fas fa-arrow-down"></i></button>
+          </div>
+          <div class="price-back">
+            <h2>₹4,999 – ₹9,999+</h2>
+            <ul>
+              <li><i class="fas fa-check"></i> Backend + API</li>
+              <li><i class="fas fa-check"></i> Admin dashboard</li>
+              <li><i class="fas fa-check"></i> Post-launch support</li>
+              <li><i class="fas fa-check"></i> Custom features</li>
+            </ul>
+         <button class="flip-btn get-started-btn">Get Started <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PACKAGES -->
+    <h3 class="section-title reveal">Packages</h3>
+    <div class="pricing-grid">
+      <div class="price-card reveal" style="transition-delay:0s;">
+        <div class="price-inner">
+          <div class="price-front">
+            <h4><i class="fas fa-seedling" style="color:#2ec4b6;margin-right:6px;"></i> Starter Pack</h4>
+            <p>Beginner combo</p>
+            <ul>
+              <li><i class="fas fa-check"></i> Portfolio website</li>
+              <li><i class="fas fa-check"></i> 2 posters</li>
+              <li><i class="fas fa-check"></i> Basic support</li>
+              <li><i class="fas fa-check"></i> Clean design</li>
+            </ul>
+            <button class="flip-btn" onclick="flipCard(event,this)">View Pricing <i class="fas fa-arrow-down"></i></button>
+          </div>
+          <div class="price-back">
+            <h2>₹1,499</h2>
+            <ul>
+              <li><i class="fas fa-check"></i> Quick delivery</li>
+              <li><i class="fas fa-check"></i> 1 revision</li>
+              <li><i class="fas fa-check"></i> Mobile friendly</li>
+              <li><i class="fas fa-check"></i> Support included</li>
+            </ul>
+            <button class="flip-btn get-started-btn">Get Started <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="price-card reveal" style="transition-delay:0.1s;">
+        <div class="price-inner">
+          <div class="price-front">
+            <span class="badge">Most Popular</span>
+            <h4><i class="fas fa-star" style="color:#ffd700;margin-right:6px;"></i> Growth Pack</h4>
+            <p>Best value for money</p>
+            <ul>
+              <li><i class="fas fa-check"></i> Static website</li>
+              <li><i class="fas fa-check"></i> 3 posters</li>
+              <li><i class="fas fa-check"></i> Mobile optimized</li>
+              <li><i class="fas fa-check"></i> Priority service</li>
+            </ul>
+            <button class="flip-btn" onclick="flipCard(event,this)">View Pricing <i class="fas fa-arrow-down"></i></button>
+          </div>
+          <div class="price-back">
+            <h2>₹2,999</h2>
+            <ul>
+              <li><i class="fas fa-check"></i> Faster delivery</li>
+              <li><i class="fas fa-check"></i> 2 revisions</li>
+              <li><i class="fas fa-check"></i> Clean modern UI</li>
+              <li><i class="fas fa-check"></i> Priority support</li>
+            </ul>
+           <button class="flip-btn get-started-btn">Get Started <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="price-card reveal" style="transition-delay:0.2s;">
+        <div class="price-inner">
+          <div class="price-front">
+            <h4><i class="fas fa-fire" style="color:#ff6b35;margin-right:6px;"></i> Pro Pack</h4>
+            <p>Complete solution</p>
+            <ul>
+              <li><i class="fas fa-check"></i> Full stack website</li>
+              <li><i class="fas fa-check"></i> Backend + Database</li>
+              <li><i class="fas fa-check"></i> 5 posters</li>
+              <li><i class="fas fa-check"></i> Priority support</li>
+            </ul>
+            <button class="flip-btn" onclick="flipCard(event,this)">View Pricing <i class="fas fa-arrow-down"></i></button>
+          </div>
+          <div class="price-back">
+            <h2>₹7,999 – ₹12,999</h2>
+            <ul>
+              <li><i class="fas fa-check"></i> 1 month support</li>
+              <li><i class="fas fa-check"></i> Advanced features</li>
+              <li><i class="fas fa-check"></i> High performance</li>
+              <li><i class="fas fa-check"></i> Custom integrations</li>
+            </ul>
+           <button class="flip-btn get-started-btn">Get Started <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADDONS -->
+    <h3 class="section-title reveal">Add-ons</h3>
+    <div class="addons reveal">
+      <span><i class="fas fa-image" style="margin-right:6px;color:#2ec4b6;"></i> Extra Poster — ₹199</span>
+      <span><i class="fas fa-globe" style="margin-right:6px;color:#2ec4b6;"></i> Domain Setup — ₹299</span>
+      <span><i class="fas fa-server" style="margin-right:6px;color:#2ec4b6;"></i> Hosting Help — ₹499</span>
+      <span><i class="fas fa-redo" style="margin-right:6px;color:#2ec4b6;"></i> Extra Revision — ₹99</span>
+      <span><i class="fas fa-shield-alt" style="margin-right:6px;color:#2ec4b6;"></i> SSL Setup — ₹199</span>
+    </div>
+
+    <!-- WHY US -->
+    <div class="why reveal">
+      <h3><i class="fas fa-rocket" style="color:#2ec4b6;margin-right:8px;"></i> Why Choose Us?</h3>
+      <div class="why-grid">
+        <div class="why-item">
+          <i class="fas fa-wallet"></i>
+          <p>Affordable Pricing</p>
+        </div>
+        <div class="why-item">
+          <i class="fas fa-bolt"></i>
+          <p>Fast Delivery</p>
+        </div>
+        <div class="why-item">
+          <i class="fas fa-paint-brush"></i>
+          <p>Modern Designs</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works" class="section section-alt">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag"><i class="fas fa-briefcase"></i> Portfolio</div>
+      <h2>Our Recent Works</h2>
+      <p>Explore our creative and high-performance projects built with passion.</p>
+    </div>
+
+    <div class="works-grid">
+      <div class="work-card reveal" style="transition-delay:0s;" onclick="goToPage()">
+        <div class="work-img" style="background:linear-gradient(135deg,rgba(46,196,182,0.15),rgba(108,99,255,0.1));">
+          <i class="fas fa-laptop-code" style="opacity:0.3;font-size:60px;"></i>
+          <span class="arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+        </div>
+        <div class="work-info">
+          <h3>Landing Pages</h3>
+          <p>Modern, responsive landing pages designed to convert visitors into customers with clean UI.</p>
+          <div class="work-tags">
+            <span>HTML/CSS</span>
+            <span>Responsive</span>
+            <span>Animation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card reveal" style="transition-delay:0.1s;" onclick="goToPage()">
+        <div class="work-img" style="background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(0,229,255,0.1));">
+          <i class="fas fa-database" style="opacity:0.3;font-size:60px;"></i>
+          <span class="arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+        </div>
+        <div class="work-info">
+          <h3>Full-Stack Apps</h3>
+          <p>Complete web applications with frontend, backend, and database integration for real-world use.</p>
+          <div class="work-tags">
+            <span>React</span>
+            <span>Node.js</span>
+            <span>MongoDB</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card reveal" style="transition-delay:0.2s;" onclick="goToPage()">
+        <div class="work-img" style="background:linear-gradient(135deg,rgba(0,229,255,0.15),rgba(46,196,182,0.1));">
+          <i class="fas fa-paint-brush" style="opacity:0.3;font-size:60px;"></i>
+          <span class="arrow"><i class="fas fa-arrow-up-right-from-square"></i></span>
+        </div>
+        <div class="work-info">
+          <h3>Other Websites</h3>
+          <p>Personal portfolios, business sites, and creative projects that showcase unique brand identities.</p>
+          <div class="work-tags">
+            <span>Portfolio</span>
+            <span>Business</span>
+            <span>Creative</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;">
+      <button id="exploreBtn" class="explore-btn">
+        Let's Explore <i class="fas fa-rocket"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact" class="footer">
+  <!-- ADVANCED BOOKING SYSTEM -->
+  <div class="booking-container reveal">
+    <h2>Start Your Project 🚀</h2>
+    <p>Select your service & customize your requirements</p>
+
+    <form id="bookingForm">
+      <!-- SERVICE SELECT -->
+      <label>Select Plan</label>
+      <select id="serviceSelect" required>
+        <optgroup label="🎁 Free Trial">
+          <option value="free">Free Trial (₹0)</option>
+        </optgroup>
+
+        <optgroup label="🧩 Individual Services" style="background-color: #000; color: #3333ff;">
+          <option value="portfolio">Portfolio Website (₹999 – ₹1499)</option>
+          <option value="static">Static Website (₹1999 – ₹2999)</option>
+          <option value="fullstack">Full Stack Website (₹4999+)</option>
+        </optgroup>
+
+        <optgroup label="📦 Packages" style="background-color: #000; color: #3333ff ;">
+          <option value="starter">Starter Pack (₹1499)</option>
+          <option value="growth">Growth Pack (₹2999)</option>
+          <option value="pro">Pro Pack (₹7999 – ₹12999)</option>
+        </optgroup>
+      </select>
+
+      <!-- DYNAMIC OPTIONS -->
+      <div id="dynamicFields"></div>
+
+      <!-- ADD ONS -->
+      <label>Add-ons</label>
+      <div class="addons-box">
+        <label><input type="checkbox" value="199"> Extra Poster (+₹199)</label>
+        <label><input type="checkbox" value="299"> Domain Setup (+₹299)</label>
+        <label><input type="checkbox" value="499"> Hosting Help (+₹499)</label>
+        <label><input type="checkbox" value="99"> Extra Revision (+₹99)</label>
+      </div>
+
+      <!-- USER INFO -->
+      <div class="form-row">
+        <input type="text" id="inputName" placeholder="Your Name" required>
+        <input type="email" id="inputEmail" placeholder="Email" required>
+      </div>
+
+      <div class="form-row">
+        <input type="tel" id="inputPhone" placeholder="Phone Number" required>
+      </div>
+
+      <textarea id="inputDetails" placeholder="Project Details..."></textarea>
+
+      <!-- PRICE SUMMARY -->
+      <div class="summary">
+        <h3>Total: ₹<span id="totalPrice">0</span></h3>
+        <p style="margin-top:10px;font-size:14px;color:#aaa;">
+          Estimated Delivery: <b id="deliveryDate">-</b>
+        </p>
+      </div>
+
+      <button type="submit" id="submitBtn">Confirm Booking</button>
+    </form>
+
+    <div class="contact-help">
+      <p>Have any confusion?</p>
+      <div class="contact-buttons">
+        <a href="tel:+918438119735" class="call-btn">
+          <i class="fas fa-phone"></i> Call Us
+        </a>
+        <a href="https://wa.me/918438119735" target="_blank" class="whatsapp-btn">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-container">
+    <div class="footer-section">
+      <h2>Nova Creationz</h2>
+      <p>Building modern websites, apps, and digital experiences for the future. Quality work at prices that don't break the bank.</p>
+      <div class="socials">
+        <a href="https://www.instagram.com/_novafreelance/?utm_source=ig_web_button_share_sheet"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/nova-creationz-8633243b3/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://whatsapp.com/channel/0029VbEsjrL1XquTehAGqS3S"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#works">Portfolio</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h3>Services</h3>
+      <ul>
+        <li><a>Web Development</a></li>
+        <li><a>UI/UX Design</a></li>
+        <li><a>App Development</a></li>
+        <li><a>Graphic Design</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <p><i class="fas fa-envelope" style="color:#2ec4b6;margin-right:8px;"></i> novacreation2k26@gmail.com</p>
+      <p style="margin-top:10px;"><i class="fas fa-phone" style="color:#2ec4b6;margin-right:8px;"></i> +91 84381 19735</p>
+      <p style="margin-top:10px;"><i class="fas fa-map-marker-alt" style="color:#2ec4b6;margin-right:8px;"></i> India</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 Nova Creationz. All Rights Reserved. Crafted with <i class="fas fa-heart" style="color:#2ec4b6;"></i></p>
+  </div>
+</footer>
+
+<!-- CONSOLIDATED JAVASCRIPT -->
+<script>
+// --- CONFIGURATION & DATA ---
+const servicePrices = {
+  portfolio: 999,
+  static: 1999,
+  fullstack: 4999,
+  starter: 1499,
+  growth: 2999,
+  pro: 7999,
+  free: 0
+};
+
+const deliveryDays = {
+  portfolio: 3,
+  static: 5,
+  fullstack: 10,
+  starter: 3,
+  growth: 5,
+  pro: 10,
+  free: 3
+};
+
+// --- DOM ELEMENTS ---
+const serviceSelect = document.getElementById("serviceSelect");
+const totalPriceEl = document.getElementById("totalPrice");
+const deliveryDateEl = document.getElementById("deliveryDate");
+const dynamicFields = document.getElementById("dynamicFields");
+const bookingForm = document.getElementById("bookingForm");
+
+let basePrice = 0;
+
+// --- UI INTERACTION FUNCTIONS ---
+
+// Preloader
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('preloader').classList.add('hidden');
+  }, 800);
+});
+
+// Scroll Progress
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / scrollHeight) * 100;
+  document.getElementById('scrollProgress').style.width = progress + '%';
+});
+
+// Cursor Glow (Desktop only)
+const cursorGlow = document.getElementById('cursorGlow');
+if (window.innerWidth > 768) {
+  document.addEventListener('mousemove', (e) => {
+    cursorGlow.style.left = e.clientX + 'px';
+    cursorGlow.style.top = e.clientY + 'px';
+  });
+} else {
+  cursorGlow.style.display = 'none';
+}
+
+// Nav Scroll Effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Mobile Menu
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+menuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('show');
+  menuBtn.textContent = mobileMenu.classList.contains('show') ? '✕' : '☰';
+});
+function closeMenu() {
+  mobileMenu.classList.remove('show');
+  menuBtn.textContent = '☰';
+}
+
+// Hero Particles
+const particlesContainer = document.getElementById('heroParticles');
+for (let i = 0; i < 30; i++) {
+  const p = document.createElement('div');
+  p.classList.add('particle');
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+  p.style.animationDelay = (Math.random() * 6) + 's';
+  p.style.width = p.style.height = (Math.random() * 3 + 1) + 'px';
+  if (Math.random() > 0.5) p.style.background = '#6C63FF';
+  if (Math.random() > 0.8) p.style.background = '#00E5FF';
+  particlesContainer.appendChild(p);
+}
+
+// Scroll Reveal
+const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+revealElements.forEach(el => revealObserver.observe(el));
+
+// Counter Animation
+const counters = document.querySelectorAll('.counter');
+let counterStarted = false;
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !counterStarted) {
+      counterStarted = true;
+      counters.forEach(counter => {
+        const target = +counter.dataset.target;
+        const duration = 2000;
+        const start = performance.now();
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          counter.textContent = Math.round(eased * target);
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      });
+    }
+  });
+}, { threshold: 0.5 });
+if (counters.length) counterObserver.observe(counters[0].closest('.stats-bar'));
+
+// Video Switch
+function updateVideo() {
+  const video = document.getElementById('heroVideo');
+  const source = video.querySelector('source');
+  if (window.innerWidth < 1069) {
+    source.src = 'final.mp4';
+  } else {
+    source.src = 'NOVA CREATIONZ.mp4';
+  }
+  video.load();
+}
+window.addEventListener('load', updateVideo);
+window.addEventListener('resize', updateVideo);
+
+// Flip Cards
+let activeCard = null;
+function flipCard(e, btn) {
+  e.stopPropagation();
+  const card = btn.closest('.price-card');
+  if (activeCard && activeCard !== card) activeCard.classList.remove('flip');
+  card.classList.toggle('flip');
+  activeCard = card.classList.contains('flip') ? card : null;
+}
+
+// Explore Button
+const exploreBtn = document.getElementById('exploreBtn');
+exploreBtn.addEventListener('click', () => {
+  exploreBtn.classList.add('clicked');
+  setTimeout(() => { window.location.href = 'projects.html'; }, 600);
+});
+
+function goToPage() {
+  window.location.href = 'projects.html';
+}
+
+// Smooth close mobile menu on link click
+document.querySelectorAll('.mobile-menu a').forEach(link => {
+  link.addEventListener('click', closeMenu);
+});
+
+// --- BOOKING SYSTEM LOGIC ---
+
+// Change Service
+serviceSelect.addEventListener("change", () => {
+  const service = serviceSelect.value;
+  basePrice = servicePrices[service] || 0;
+  updatePrice();
+});
+
+// Addons Calculation
+document.querySelectorAll(".addons-box input").forEach(box => {
+  box.addEventListener("change", updatePrice);
+});
+
+// Calculate Total
+function updatePrice(){
+  let total = basePrice;
+
+  document.querySelectorAll(".addons-box input:checked").forEach(box => {
+    total += parseInt(box.value);
+  });
+
+  totalPriceEl.textContent = total;
+
+  // Delivery Date Calculation
+  const service = serviceSelect.value;
+  const days = deliveryDays[service] || 0;
+
+  if(days > 0){
+    const today = new Date();
+    today.setDate(today.getDate() + days);
+    const options = { day: 'numeric', month: 'short', year: 'numeric' };
+    deliveryDateEl.textContent = today.toLocaleDateString('en-IN', options);
+  } else {
+    deliveryDateEl.textContent = "-";
+  }
+}
+
+// Get Started Buttons (Scroll to form)
+document.querySelectorAll(".get-started-btn").forEach(button => {
+  button.addEventListener("click", function () {
+    let card = this.closest(".price-card") || this.closest(".free-trial");
+    let serviceName = "";
+
+    if (card) {
+      let title = card.querySelector("h4, h3");
+      if (title) serviceName = title.innerText;
+    }
+
+    // Auto select service in form
+    let select = document.querySelector("#bookingForm select");
+    if (select && serviceName) {
+      for (let option of select.options) {
+        if (serviceName.toLowerCase().includes(option.text.toLowerCase())) {
+          option.selected = true;
+          // Trigger change event to update price
+          select.dispatchEvent(new Event('change'));
+        }
+      }
+    }
+
+    // Scroll to form
+    document.getElementById("bookingForm").scrollIntoView({
+      behavior: "smooth"
+    });
+  });
+});
+
+// --- FORM SUBMISSION TO MONGODB ---
+
+
+</script>
+
+<!-- 1. LOAD EMAILJS FIRST -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<!-- 2. INIT EMAILJS -->
+<script>
+(function(){
+  emailjs.init("0cRHGmJWtilMJRxzY");
+})();
+</script>
+
+<!-- 3. YOUR FORM SCRIPT -->
+<script>
+document.getElementById("bookingForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const service = document.getElementById("serviceSelect").value;
+  const name = document.getElementById("inputName").value;
+  const email = document.getElementById("inputEmail").value;
+  const phone = document.getElementById("inputPhone").value;
+  const details = document.getElementById("inputDetails").value;
+  const total = document.getElementById("totalPrice").innerText;
+  const delivery = document.getElementById("deliveryDate").innerText;
+
+  let addons = [];
+  document.querySelectorAll(".addons-box input:checked").forEach(el => {
+    addons.push(el.parentElement.innerText.trim());
+  });
+
+  let dynamicData = {};
+  document.querySelectorAll("#dynamicFields input, #dynamicFields select, #dynamicFields textarea")
+    .forEach(field => {
+      if(field.value){
+        dynamicData[field.name || field.id || "field"] = field.value;
+      }
+    });
+
+  let dynamicText = Object.entries(dynamicData)
+    .map(([key, val]) => `${key}: ${val}`)
+    .join("\n");
+
+  const templateParams = {
+    name,
+    email,
+    phone,
+    service,
+    addons: addons.length ? addons.join(", ") : "None",
+    details: details || "None",
+    dynamic: dynamicText || "None",
+    total,
+    delivery
+  };
+
+  emailjs.send("service_s04bllc", "template_11hbvsq", templateParams)
+  .then(res => {
+    alert("Booking sent successfully 🚀");
+    console.log(res);
+  })
+  .catch(err => {
+    console.log("ERROR FULL:", err);
+    alert("Error sending form ❌");
+  });
+});
+</script>
+</body>
+</html>
