@@ -905,7 +905,7 @@ nav .nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(46,196,
       </div>
 
       <div class="form-row">
-        <input type="tel" id="inputPhone" placeholder="Phone Number" required>
+        <input type="tel" id="inputPhone" placeholder="Phone Number" required pattern="[0-9]{10}" minlength="10" maxlength="10">
       </div>
 
       <textarea id="inputDetails" placeholder="Project Details..."></textarea>
