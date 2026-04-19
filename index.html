@@ -415,6 +415,47 @@ nav .nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(46,196,
   transform:translateY(-2px);
   box-shadow:0 10px 25px rgba(37,211,102,0.4);
 }
+.success-popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:99999;
+  opacity:0;
+  visibility:hidden;
+  transition:0.3s;
+}
+
+.success-popup.show{
+  opacity:1;
+  visibility:visible;
+}
+
+.popup-box{
+  background:#0a0a14;
+  padding:30px 40px;
+  border-radius:16px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,0.1);
+}
+
+.loader{
+  width:40px;
+  height:40px;
+  border:4px solid rgba(255,255,255,0.2);
+  border-top:4px solid #2ec4b6;
+  border-radius:50%;
+  margin:auto;
+  margin-bottom:15px;
+  animation:spin 1s linear infinite;
+}
+
+.popup-box h3{
+  font-size:18px;
+  color:#fff;
+}
 </style>
 </head>
 <body>
@@ -905,10 +946,10 @@ nav .nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(46,196,
       </div>
 
       <div class="form-row">
-        <input type="tel" id="inputPhone" placeholder="Phone Number" required pattern="[0-9]{10}" minlength="10" maxlength="10">
+        <input type="tel" id="inputPhone" placeholder="Phone Number" required minlength="10" maxlength="10">
       </div>
 
-      <textarea id="inputDetails" placeholder="Project Details..."></textarea>
+      <textarea id="inputDetails" placeholder="Project Details..." required></textarea>
 
       <!-- PRICE SUMMARY -->
       <div class="summary">
@@ -964,7 +1005,12 @@ nav .nav-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(46,196,
         <li><a>Graphic Design</a></li>
       </ul>
     </div>
-
+<div id="successPopup" class="success-popup">
+  <div class="popup-box">
+    <div class="loader"></div>
+    <h3 id="popupText">Uploading...</h3>
+  </div>
+</div>
     <div class="footer-section">
       <h3>Contact</h3>
       <p><i class="fas fa-envelope" style="color:#2ec4b6;margin-right:8px;"></i> novacreation2k26@gmail.com</p>
@@ -1273,7 +1319,34 @@ document.getElementById("bookingForm").addEventListener("submit", function(e) {
 
   emailjs.send("service_s04bllc", "template_11hbvsq", templateParams)
   .then(res => {
-    alert("Booking sent successfully 🚀");
+    const popup = document.getElementById("successPopup");
+const popupText = document.getElementById("popupText");
+
+popup.classList.add("show");
+popupText.innerText = "Uploading...";
+
+// simulate loading (you can reduce time if needed)
+setTimeout(() => {
+  popupText.innerText = "Uploaded Successfully 🚀";
+
+  // stop loader
+  document.querySelector(".loader").style.display = "none";
+
+  // reset form
+  document.getElementById("bookingForm").reset();
+  document.getElementById("totalPrice").innerText = "0";
+  document.getElementById("deliveryDate").innerText = "-";
+
+  // hide popup after 2 sec
+  setTimeout(() => {
+    popup.classList.remove("show");
+
+    // reset loader for next time
+    document.querySelector(".loader").style.display = "block";
+    popupText.innerText = "Uploading...";
+  }, 2000);
+
+}, 2000);
     console.log(res);
   })
   .catch(err => {
