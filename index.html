@@ -1260,7 +1260,7 @@ document.querySelectorAll(".get-started-btn").forEach(button => {
   });
 });
 
-// --- FORM SUBMISSION TO MONGODB ---
+// --- FORM SUBMISSION TO MONGODB --- //
 
 
 </script>
@@ -1353,7 +1353,33 @@ setTimeout(() => {
     console.log("ERROR FULL:", err);
     alert("Error sending form ❌");
   });
+  const statusMsg = document.getElementById("statusMsg");
+  
+
+  fetch("https://script.google.com/macros/s/AKfycbwnoxJpGh6Eov3ugvG12pMZKfqtIEy2mnGeSvKZ_AuhSvL6lhIcq2m9Uc1kRJ28lEsJEA/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      name: name,
+      "email-address": email,
+      phone: phone,
+      "project-details": details,
+      service: service,
+      "add-on": "None",
+      "est-budget": total,
+      delivery: delivery
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    statusMsg.innerText = "✅ Submitted successfully!";
+    document.getElementById("bookingForm").reset();
+  })
+  .catch(err => {
+    statusMsg.innerText = "❌ Error submitting form";
+    console.error(err);
+  });
 });
 </script>
+
 </body>
 </html>
